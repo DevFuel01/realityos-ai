@@ -16,7 +16,7 @@ Most individuals face "decision paralysis" when confronted with complex, non-obv
 - **Lack of Action:** Generic advice without a concrete execution roadmap.
 
 ### 💡 Solution Approach
-RealityOS AI leverages the **Google Gemini 1.5 Flash** model to perform "Simulated Decision Intelligence." Unlike a standard chatbot, it uses a deterministic JSON-based prompting layer to extract high-precision metrics from the AI.
+RealityOS AI leverages the **Google Gemini 2.5 Flash** model to perform "Simulated Decision Intelligence." Unlike a standard chatbot, it uses a deterministic JSON-based prompting layer to extract high-precision metrics from the AI.
 - **Structured Analysis:** Converting AI intuition into measurable "Growth" and "Risk" scores.
 - **Divergent Paths:** Side-by-side simulation of two mutually exclusive futures.
 - **Actionable Execution:** Automatically generating a 5-step roadmap based on the recommended path.
