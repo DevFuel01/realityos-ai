@@ -155,10 +155,10 @@ RealityOSAI/
 | Frontend | HTML5, Vanilla JS, Vanilla CSS (Custom Design System) |
 | Backend | PHP 8.1+ (REST Architecture) |
 | Database | MySQL (PDO) |
-| AI | Google Gemini 1.5 Flash |
+| AI | Google Gemini 2.5 Flash |
 | Design | Glassmorphism, CSS Variables, SVG Animations |
 | Fonts | Inter + Space Grotesk (Google Fonts) |
 
 ---
 
-Built with ❤️ for hackathon innovation · Powered by Google Gemini API
+Built with ❤️ for Dev Annual Hackathon · Powered by Google Gemini API
