@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — RealityOS AI</title>
+  <meta name="description" content="Sign in to your RealityOS AI account to access your decision intelligence dashboard." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+    .auth-card { width: 100%; max-width: 440px; background: rgba(10,15,38,0.8); border: 1px solid var(--glass-border); border-radius: var(--radius-xl); padding: 48px 40px; backdrop-filter: blur(30px); animation: fadeSlideIn 0.5s ease; position: relative; z-index: 1; }
+    .auth-header { text-align: center; margin-bottom: 36px; }
+    .auth-logo { width: 54px; height: 54px; background: var(--gradient-main); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin: 0 auto 16px; box-shadow: 0 0 30px rgba(79,142,247,0.3); }
+    .auth-footer-text { text-align: center; margin-top: 24px; font-size: 0.875rem; color: var(--text-muted); }
+    .auth-footer-text a { color: var(--accent-blue); font-weight: 600; }
+    .divider-or { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--text-muted); font-size: 0.8rem; }
+    .divider-or::before, .divider-or::after { content: ''; flex: 1; height: 1px; background: var(--border-subtle); }
+    @media (max-width: 480px) { .auth-card { padding: 32px 24px; } }
+  </style>
+</head>
+<body>
+  <div class="glow-orb-2"></div>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <a href="index.html" style="display:block;text-align:center;margin-bottom:4px;">
+        <div class="auth-logo">🧠</div>
+      </a>
+      <div class="auth-header">
+        <h1 style="font-size:1.6rem;margin-bottom:8px;">Welcome back</h1>
+        <p style="color:var(--text-secondary);font-size:0.9rem;">Sign in to continue your decision simulations.</p>
+      </div>
+
+      <div id="alert-container"></div>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="you@example.com" autocomplete="email" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-control" placeholder="Your password" autocomplete="current-password" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full" id="login-btn" style="width:100%;justify-content:center;margin-top:8px;">
+          Sign In to RealityOS AI
+        </button>
+      </form>
+
+      <div class="divider-or">or</div>
+
+      <div style="background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);border-radius:var(--radius-md);padding:16px;">
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:10px;text-align:center;text-transform:uppercase;letter-spacing:.05em;">Demo Account</div>
+        <button class="btn btn-ghost w-full" style="width:100%;justify-content:center;font-size:0.85rem;" id="demo-btn">
+          🎯 Sign in with Demo Account
+        </button>
+        <div style="text-align:center;font-size:0.72rem;color:var(--text-muted);margin-top:8px;">demo@realityos.ai / demo1234</div>
+      </div>
+
+      <p class="auth-footer-text">Don't have an account? <a href="register.html">Create one free →</a></p>
+    </div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Auth.redirectIfAuth();
+
+      const form = document.getElementById('login-form');
+      const demoBtn = document.getElementById('demo-btn');
+
+      async function doLogin(email, password) {
+        clearAlert('alert-container');
+        setLoading('login-btn', true, 'Signing in...');
+
+        const res = await API.login({ email, password });
+        setLoading('login-btn', false, 'Sign In to RealityOS AI');
+
+        if (res.ok && res.data.success) {
+          Auth.setUser(res.data.user);
+          showAlert('alert-container', res.data.message, 'success');
+          setTimeout(() => window.location.href = 'dashboard.html', 800);
+        } else {
+          showAlert('alert-container', res.data.error || 'Login failed. Please try again.');
+        }
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        if (!email || !password) { showAlert('alert-container', 'Please fill in all fields.'); return; }
+        await doLogin(email, password);
+      });
+
+      demoBtn.addEventListener('click', () => doLogin('demo@realityos.ai', 'demo1234'));
+    });
+  </script>
+</body>
+</html>

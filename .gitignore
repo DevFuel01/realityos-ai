@@ -1,0 +1,25 @@
+# RealityOS AI - .gitignore
+
+# Dependencies
+vendor/
+node_modules/
+
+# Logs
+*.log
+api/logs/
+error.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment (EXCLUDED per user request because key is removed)
+# !config/env.php
+
+# If you want to keep env.php out of git in the future, uncomment below:
+# config/env.php
+
+# System
+.idea/
+.vscode/
+.gemini/

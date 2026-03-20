@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Simulations — RealityOS AI</title>
+  <meta name="description" content="View and manage your saved AI decision simulations." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+    .sim-grid { display: flex; flex-direction: column; gap: 12px; }
+    .sim-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 20px 24px; display: flex; align-items: center; gap: 16px; transition: all var(--transition); cursor: pointer; position: relative; }
+    .sim-card:hover { background: var(--bg-card-hover); border-color: var(--border-glow); transform: translateX(4px); box-shadow: var(--shadow-glow); }
+    .sim-card .sim-icon { width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--gradient-card); border: 1px solid rgba(79,142,247,0.15); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .sim-card .sim-body { flex: 1; min-width: 0; }
+    .sim-card .sim-title { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+    .sim-card .sim-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .sim-card .sim-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .delete-btn { width: 32px; height: 32px; border: none; background: rgba(239,68,68,0.08); color: #ef4444; border-radius: var(--radius-sm); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all var(--transition); }
+    .delete-btn:hover { background: rgba(239,68,68,0.2); }
+    @media (max-width: 600px) { .sim-card { flex-wrap: wrap; } .sim-card .sim-actions { width: 100%; justify-content: flex-end; } }
+  </style>
+</head>
+<body>
+  <div class="glow-orb-2"></div>
+
+  <nav class="navbar">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      <a href="index.html" class="navbar-brand"><div class="navbar-logo">🧠</div> RealityOS AI</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="new-simulation.html" class="btn btn-primary btn-sm">+ New Simulation</a>
+      <button class="btn btn-ghost btn-sm" data-action="logout">Sign Out</button>
+    </div>
+  </nav>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="new-simulation.html" class="sidebar-link"><span class="icon">➕</span> New Simulation</a>
+      <a href="simulations.html" class="sidebar-link active"><span class="icon">🗃️</span> My Simulations</a>
+      <div class="sidebar-section-label">Account</div>
+      <a href="profile.html" class="sidebar-link"><span class="icon">👤</span> Profile</a>
+      <a href="#" class="sidebar-link" data-action="logout"><span class="icon">🚪</span> Sign Out</a>
+    </nav>
+  </aside>
+
+  <div class="app-layout">
+    <main class="main-content">
+      <div class="page-header">
+        <h1>My Simulations</h1>
+        <p>Your saved decision analyses and AI reports.</p>
+      </div>
+
+      <div class="filter-bar">
+        <button class="btn btn-ghost btn-sm filter-btn active" data-cat="">All</button>
+        <button class="btn btn-ghost btn-sm filter-btn" data-cat="Career">💼 Career</button>
+        <button class="btn btn-ghost btn-sm filter-btn" data-cat="Finance">💰 Finance</button>
+        <button class="btn btn-ghost btn-sm filter-btn" data-cat="Business">🚀 Business</button>
+        <button class="btn btn-ghost btn-sm filter-btn" data-cat="Technology">💻 Technology</button>
+        <button class="btn btn-ghost btn-sm filter-btn" data-cat="Education">🎓 Education</button>
+        <button class="btn btn-ghost btn-sm filter-btn" data-cat="Personal Growth">🌱 Personal Growth</button>
+      </div>
+
+      <div class="sim-grid" id="sim-grid">
+        <div style="text-align:center;padding:60px 20px;">
+          <div class="spinner" style="margin:0 auto 16px;"></div>
+          <p style="color:var(--text-muted);">Loading your simulations...</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    let allSims = [];
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      Auth.redirectIfNotAuth();
+      await loadSims('');
+
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderSims(btn.dataset.cat ? allSims.filter(s => s.category === btn.dataset.cat) : allSims);
+        });
+      });
+    });
+
+    async function loadSims(category) {
+      const res = await API.getSimulations(category);
+      if (res.ok && res.data.success) {
+        allSims = res.data.simulations;
+        renderSims(allSims);
+      } else {
+        document.getElementById('sim-grid').innerHTML = `<div class="alert alert-error">Failed to load simulations.</div>`;
+      }
+    }
+
+    function renderSims(sims) {
+      const grid = document.getElementById('sim-grid');
+      if (!sims.length) {
+        grid.innerHTML = `<div class="empty-state">
+          <div class="icon">🧩</div>
+          <h3>No simulations here</h3>
+          <p>Run your first AI decision simulation to see it appear here.</p>
+          <a href="new-simulation.html" class="btn btn-primary" style="margin-top:16px;">+ New Simulation</a>
+        </div>`;
+        return;
+      }
+
+      grid.innerHTML = sims.map(s => {
+        const recParts = s.recommended_option ? s.recommended_option.split(' ') : [];
+        const shortRec = recParts.slice(0, 4).join(' ') + (recParts.length > 4 ? '...' : '');
+        return `
+        <div class="sim-card" onclick="openSim(${s.id}, event)" data-id="${s.id}">
+          <div class="sim-icon">${getCategoryIcon(s.category)}</div>
+          <div class="sim-body">
+            <div class="sim-title">${s.decision_title}</div>
+            <div class="sim-meta">
+              <span class="badge badge-blue" style="font-size:0.7rem;">${s.category}</span>
+              ${s.recommended_option ? `<span class="badge badge-green" style="font-size:0.7rem;">✅ ${shortRec}</span>` : ''}
+              <span style="font-size:0.75rem;color:var(--text-muted);">${s.confidence_score}% confidence</span>
+              <span style="font-size:0.75rem;color:var(--text-muted);">${formatDate(s.created_at)}</span>
+            </div>
+          </div>
+          <div class="sim-actions">
+            <div style="text-align:center;min-width:60px;">
+              <div style="font-size:1.1rem;font-weight:800;color:var(--accent-blue);">${s.confidence_score}%</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);">Confidence</div>
+            </div>
+            <button class="delete-btn" title="Delete simulation" onclick="deleteSim(${s.id}, event)">🗑</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function openSim(id, e) {
+      window.location.href = `results.html?id=${id}`;
+    }
+
+    async function deleteSim(id, e) {
+      e.stopPropagation();
+      if (!confirm('Delete this simulation permanently? This cannot be undone.')) return;
+      const res = await API.deleteSimulation(id);
+      if (res.ok && res.data.success) {
+        allSims = allSims.filter(s => s.id != id);
+        renderSims(allSims);
+      } else {
+        alert(res.data.error || 'Delete failed. Please try again.');
+      }
+    }
+  </script>
+</body>
+</html>

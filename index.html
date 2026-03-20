@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RealityOS AI — AI-Powered Decision Intelligence</title>
+  <meta name="description" content="Stop guessing. RealityOS AI helps you simulate real-world outcomes before making important life, career, business, or financial decisions." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .landing-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px; height: var(--navbar-h); display: flex; align-items: center; justify-content: space-between; background: rgba(5,8,22,0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-subtle); }
+    .hero-content { flex: 1; max-width: 600px; }
+    .hero-flex { display: flex; align-items: center; gap: 60px; }
+    .use-case-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 900px) { .use-case-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .hero-flex { flex-direction: column; } .landing-nav .nav-links { display: none; } }
+    .nav-links { display: flex; align-items: center; gap: 8px; }
+    .how-steps { display: flex; flex-direction: column; gap: 32px; }
+    .step-connector { width: 2px; height: 24px; background: linear-gradient(to bottom, var(--accent-blue), transparent); margin-left: 22px; }
+    .gradient-text { background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .glow-btn { position: relative; }
+    .glow-btn::after { content: ''; position: absolute; inset: -2px; background: var(--gradient-main); border-radius: inherit; z-index: -1; opacity: 0; transition: opacity var(--transition); filter: blur(8px); }
+    .glow-btn:hover::after { opacity: 0.5; }
+  </style>
+</head>
+<body>
+  <div class="glow-orb-2"></div>
+
+  <!-- Navbar -->
+  <nav class="landing-nav">
+    <a href="index.html" class="navbar-brand">
+      <div class="navbar-logo">🧠</div>
+      RealityOS AI
+    </a>
+    <div class="nav-links">
+      <a href="#features" class="navbar-link">Features</a>
+      <a href="#how-it-works" class="navbar-link">How It Works</a>
+      <a href="#use-cases" class="navbar-link">Use Cases</a>
+      <a href="login.html" class="btn btn-ghost btn-sm">Sign In</a>
+      <a href="register.html" class="btn btn-primary btn-sm glow-btn">Get Started Free</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-flex">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span>✨</span> AI-Powered Decision Intelligence
+          </div>
+          <h1>
+            Stop guessing.<br />
+            <span class="gradient-text">Simulate your decisions</span><br />
+            before you make them.
+          </h1>
+          <p>RealityOS AI compares your options, evaluates risks, and delivers structured AI recommendations for real-world decisions — career, business, finance, and beyond.</p>
+          <div class="hero-cta">
+            <a href="register.html" class="btn btn-primary btn-lg glow-btn" id="cta-hero">
+              🚀 Try RealityOS AI Free
+            </a>
+            <a href="#how-it-works" class="btn btn-ghost btn-lg">See How It Works</a>
+          </div>
+          <div style="margin-top:32px; display:flex; gap:32px; flex-wrap:wrap;">
+            <div>
+              <div style="font-size:1.4rem;font-weight:800;color:var(--text-primary)">1000+</div>
+              <div style="font-size:0.8rem;color:var(--text-muted)">Decisions Simulated</div>
+            </div>
+            <div>
+              <div style="font-size:1.4rem;font-weight:800;color:var(--text-primary)">94%</div>
+              <div style="font-size:0.8rem;color:var(--text-muted)">Avg. Confidence Score</div>
+            </div>
+            <div>
+              <div style="font-size:1.4rem;font-weight:800;color:var(--text-primary)">7</div>
+              <div style="font-size:0.8rem;color:var(--text-muted)">Decision Categories</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <!-- Hero Card Preview -->
+          <div class="hero-card-preview">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <span style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;">AI Analysis</span>
+              <span class="badge badge-blue">Career</span>
+            </div>
+            <div style="font-size:0.9rem;font-weight:600;margin-bottom:6px;">Should I become a Full-Stack Dev or AI Engineer?</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:16px;">Analyzed just now</div>
+
+            <div style="margin-bottom:12px;">
+              <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.8rem;">
+                <span style="color:var(--text-secondary)">Confidence Score</span>
+                <span style="color:var(--accent-blue);font-weight:700;">87%</span>
+              </div>
+              <div class="meter-track meter-blue">
+                <div class="meter-fill" style="width:87%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-cyan))"></div>
+              </div>
+            </div>
+
+            <div style="padding:12px;background:rgba(79,142,247,0.08);border:1px solid rgba(79,142,247,0.15);border-radius:var(--radius-md);margin-bottom:12px;">
+              <div style="font-size:0.7rem;color:var(--text-muted);margin-bottom:4px;">✅ AI RECOMMENDATION</div>
+              <div style="font-size:0.85rem;font-weight:600;color:var(--accent-blue);">Pursue AI Engineering</div>
+            </div>
+
+            <div style="display:flex;gap:8px;">
+              <div style="flex:1;padding:8px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);border-radius:var(--radius-sm);">
+                <div style="font-size:0.65rem;color:var(--text-muted);">Option A</div>
+                <div style="font-size:0.78rem;font-weight:600;margin-top:2px;">Full-Stack Dev</div>
+                <div style="font-size:0.65rem;color:var(--accent-amber);">Opp. 72%</div>
+              </div>
+              <div style="flex:1;padding:8px;background:rgba(79,142,247,0.06);border:1px solid rgba(79,142,247,0.15);border-radius:var(--radius-sm);">
+                <div style="font-size:0.65rem;color:var(--text-muted);">Option B ⭐</div>
+                <div style="font-size:0.78rem;font-weight:600;margin-top:2px;">AI Engineering</div>
+                <div style="font-size:0.65rem;color:var(--accent-green);">Opp. 91%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating badges -->
+          <div style="position:absolute;top:20px;right:-10px;padding:10px 16px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.25);border-radius:var(--radius-md);font-size:0.8rem;color:var(--accent-green);font-weight:600;animation:float 3s ease-in-out infinite 0.5s;">✓ Low Risk</div>
+          <div style="position:absolute;bottom:40px;left:-20px;padding:10px 16px;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);border-radius:var(--radius-md);font-size:0.8rem;color:var(--accent-purple);font-weight:600;animation:float 3.5s ease-in-out infinite 1s;">🎯 5 Action Steps</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">⚡ Core Features</div>
+        <h2>Decision intelligence at every level</h2>
+        <p>From quick choices to life-defining moments, RealityOS AI gives you the clarity to move forward with confidence.</p>
+      </div>
+      <div class="grid-3" id="features-grid">
+        <div class="feature-card" style="animation:fadeSlideIn 0.5s ease 0.1s both">
+          <div class="feature-icon">🧩</div>
+          <h3 style="margin-bottom:10px;">Dual-Option Comparison</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Enter two options side-by-side and receive a structured AI breakdown covering pros, cons, risks, and opportunities for each.</p>
+        </div>
+        <div class="feature-card" style="animation:fadeSlideIn 0.5s ease 0.2s both">
+          <div class="feature-icon">📊</div>
+          <h3 style="margin-bottom:10px;">Risk & Opportunity Scoring</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Animated meters show risk levels and opportunity scores at a glance, so you understand the trade-offs instantly.</p>
+        </div>
+        <div class="feature-card" style="animation:fadeSlideIn 0.5s ease 0.3s both">
+          <div class="feature-icon">🤖</div>
+          <h3 style="margin-bottom:10px;">Gemini AI Engine</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Powered by Google Gemini — a state-of-the-art large language model that understands context and delivers expert-level analysis.</p>
+        </div>
+        <div class="feature-card" style="animation:fadeSlideIn 0.5s ease 0.15s both">
+          <div class="feature-icon">🎯</div>
+          <h3 style="margin-bottom:10px;">AI Recommendation Engine</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Get a definitive recommendation backed by reasoning, with a confidence score showing how certain the AI is about its advice.</p>
+        </div>
+        <div class="feature-card" style="animation:fadeSlideIn 0.5s ease 0.25s both">
+          <div class="feature-icon">📋</div>
+          <h3 style="margin-bottom:10px;">Action Plan Generator</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Every analysis ends with a concrete list of next steps you can act on immediately — no vague advice, just clear direction.</p>
+        </div>
+        <div class="feature-card" style="animation:fadeSlideIn 0.5s ease 0.35s both">
+          <div class="feature-icon">🗃️</div>
+          <h3 style="margin-bottom:10px;">Saved Analysis History</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">Every simulation is saved to your personal dashboard so you can revisit past decisions and track your thinking over time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section" id="how-it-works" style="background: linear-gradient(180deg, transparent 0%, rgba(79,142,247,0.03) 50%, transparent 100%);">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">🔄 How It Works</div>
+        <h2>From question to clarity in minutes</h2>
+        <p>Our structured process turns complex decisions into clear, data-backed recommendations you can act on today.</p>
+      </div>
+      <div style="max-width:680px;margin:0 auto;" class="how-steps">
+        <div class="how-step">
+          <div><div class="how-step-num">1</div></div>
+          <div>
+            <h3 style="margin-bottom:6px;">Describe Your Decision</h3>
+            <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;">Enter your situation, two competing options, your goal, time horizon, and risk tolerance into the simulation form.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="how-step">
+          <div><div class="how-step-num">2</div></div>
+          <div>
+            <h3 style="margin-bottom:6px;">AI Analyzes Both Options</h3>
+            <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;">The Gemini AI engine evaluates risks, opportunities, short-term and long-term outlooks for each option in your context.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="how-step">
+          <div><div class="how-step-num">3</div></div>
+          <div>
+            <h3 style="margin-bottom:6px;">Review Structured Results</h3>
+            <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;">Get a side-by-side comparison, confidence score, risk meters, pros/cons, and the AI's reasoned recommendation.</p>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="how-step">
+          <div><div class="how-step-num">4</div></div>
+          <div>
+            <h3 style="margin-bottom:6px;">Take Action With Clarity</h3>
+            <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.6;">Follow your personalized action plan, save the report, and track your decision history on your dashboard.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="section" id="use-cases">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-badge">🌍 Real-World Use Cases</div>
+        <h2>Built for decisions that actually matter</h2>
+        <p>From career pivots to investment choices, RealityOS AI supports the decisions that shape your life.</p>
+      </div>
+      <div class="use-case-grid">
+        <div class="card" style="border-left:3px solid var(--accent-blue);">
+          <div style="font-size:1.5rem;margin-bottom:12px;">💼</div>
+          <h4 style="margin-bottom:8px;">Career Decisions</h4>
+          <p style="color:var(--text-secondary);font-size:0.85rem;line-height:1.6;">"Should I switch industries or get promoted in my current field?"</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent-purple);">
+          <div style="font-size:1.5rem;margin-bottom:12px;">💰</div>
+          <h4 style="margin-bottom:8px;">Financial Choices</h4>
+          <p style="color:var(--text-secondary);font-size:0.85rem;line-height:1.6;">"Should I invest in real estate or build an index fund portfolio?"</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent-green);">
+          <div style="font-size:1.5rem;margin-bottom:12px;">🚀</div>
+          <h4 style="margin-bottom:8px;">Business Strategy</h4>
+          <p style="color:var(--text-secondary);font-size:0.85rem;line-height:1.6;">"Should I launch a SaaS product or offer consulting services first?"</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent-amber);">
+          <div style="font-size:1.5rem;margin-bottom:12px;">🎓</div>
+          <h4 style="margin-bottom:8px;">Education Path</h4>
+          <p style="color:var(--text-secondary);font-size:0.85rem;line-height:1.6;">"Should I pursue a master's degree or focus on self-directed learning?"</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent-cyan);">
+          <div style="font-size:1.5rem;margin-bottom:12px;">💻</div>
+          <h4 style="margin-bottom:8px;">Tech Decisions</h4>
+          <p style="color:var(--text-secondary);font-size:0.85rem;line-height:1.6;">"Should I learn AI engineering or focus on full-stack web development?"</p>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent-pink);">
+          <div style="font-size:1.5rem;margin-bottom:12px;">🌱</div>
+          <h4 style="margin-bottom:8px;">Personal Growth</h4>
+          <p style="color:var(--text-secondary);font-size:0.85rem;line-height:1.6;">"Should I focus on deep skill mastery or broaden my skill set broadly?"</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section">
+    <div class="container">
+      <div class="card" style="text-align:center;padding:64px 48px;background:var(--gradient-card);border-color:rgba(79,142,247,0.2);">
+        <div style="font-size:2.5rem;margin-bottom:16px;">🧠</div>
+        <h2 style="font-size:2rem;margin-bottom:16px;">Ready to simulate smarter decisions?</h2>
+        <p style="color:var(--text-secondary);max-width:500px;margin:0 auto 32px;font-size:1rem;line-height:1.7;">Join thousands of professionals using AI to make better decisions every day. Free to start.</p>
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+          <a href="register.html" class="btn btn-primary btn-lg glow-btn">🚀 Get Started — It's Free</a>
+          <a href="login.html" class="btn btn-ghost btn-lg">Sign In to Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:0;" id="footer-grid">
+        <div class="footer-brand">
+          <div class="navbar-brand" style="margin-bottom:12px;">
+            <div class="navbar-logo">🧠</div>
+            RealityOS AI
+          </div>
+          <p>An AI-powered decision intelligence platform for smarter real-world decisions.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#use-cases">Use Cases</a>
+        </div>
+        <div class="footer-links">
+          <h4>Account</h4>
+          <a href="register.html">Register</a>
+          <a href="login.html">Login</a>
+          <a href="dashboard.html">Dashboard</a>
+        </div>
+        <div class="footer-links">
+          <h4>Platform</h4>
+          <a href="#">About</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 RealityOS AI. Built for decision intelligence.</span>
+        <span>Powered by Google Gemini API</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+    // If already logged in, redirect to dashboard
+    document.addEventListener('DOMContentLoaded', () => {
+      if (Auth.isLoggedIn()) {
+        document.querySelector('.hero-cta').innerHTML +=
+          `<div style="margin-top:12px;font-size:0.85rem;color:var(--text-muted)">Welcome back! <a href="dashboard.html" style="color:var(--accent-blue)">Open Dashboard →</a></div>`;
+      }
+    });
+  </script>
+</body>
+</html>

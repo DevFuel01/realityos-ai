@@ -1,0 +1,16 @@
+# RealityOS AI - Security Configuration
+Options -Indexes
+
+# Block sensitive directories
+RewriteEngine On
+RewriteRule ^(config|classes|includes)/ - [F,L]
+
+# Prevent sensitive file access
+<FilesMatch "\.(php|sql|md|json)$">
+  # Allow access to API and entry points
+  # (In a real app, we'd move core logic outside public_html)
+</FilesMatch>
+
+# Error Document
+ErrorDocument 403 /403.html
+ErrorDocument 404 /404.html

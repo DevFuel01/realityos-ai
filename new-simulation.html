@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Simulation — RealityOS AI</title>
+  <meta name="description" content="Create a new AI decision simulation on RealityOS AI." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .form-section { margin-bottom: 28px; }
+    .form-section-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 8px; }
+    .option-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .option-box { background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 20px; }
+    .option-box.option-a-box { border-left: 3px solid var(--accent-blue); }
+    .option-box.option-b-box { border-left: 3px solid var(--accent-purple); }
+    .option-label { font-size: 0.85rem; font-weight: 700; margin-bottom: 14px; display:flex; align-items:center; gap:8px; }
+    .option-a-label { color: var(--accent-blue); }
+    .option-b-label { color: var(--accent-purple); }
+    .samples-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+    .sample-pill { padding: 8px 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--glass-border); border-radius: 999px; font-size: 0.8rem; color: var(--text-secondary); cursor: pointer; transition: all var(--transition); white-space: nowrap; }
+    .sample-pill:hover { border-color: var(--accent-blue); color: var(--accent-blue); background: rgba(79,142,247,0.06); }
+    #ai-loading-overlay { display:none; }
+    #ai-loading-overlay:not(.hidden) { display:flex; }
+    @media (max-width: 768px) { .option-pair { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="glow-orb-2"></div>
+
+  <!-- AI Loading Overlay -->
+  <div class="ai-loading-overlay hidden" id="ai-loading-overlay">
+    <div class="ai-loading-ring"></div>
+    <div>
+      <div class="ai-loading-text">Running Decision Analysis</div>
+      <div class="ai-loading-subtext" id="loading-step">Analyzing your decision context...</div>
+    </div>
+    <div style="width:240px;margin-top:8px;">
+      <div class="meter-track meter-blue">
+        <div class="meter-fill" id="loading-bar" style="width:0%;transition:width 2.8s ease;"></div>
+      </div>
+    </div>
+    <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">Powered by Gemini AI — usually takes 10–20 seconds</div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      <a href="index.html" class="navbar-brand"><div class="navbar-logo">🧠</div> RealityOS AI</a>
+    </div>
+    <div class="navbar-actions">
+      <a href="dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+      <button class="btn btn-ghost btn-sm" data-action="logout">Sign Out</button>
+    </div>
+  </nav>
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="sidebar" id="sidebar">
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="dashboard.html" class="sidebar-link"><span class="icon">📊</span> Dashboard</a>
+      <a href="new-simulation.html" class="sidebar-link active"><span class="icon">➕</span> New Simulation</a>
+      <a href="simulations.html" class="sidebar-link"><span class="icon">🗃️</span> My Simulations</a>
+      <div class="sidebar-section-label">Account</div>
+      <a href="profile.html" class="sidebar-link"><span class="icon">👤</span> Profile</a>
+      <a href="#" class="sidebar-link" data-action="logout"><span class="icon">🚪</span> Sign Out</a>
+    </nav>
+  </aside>
+
+  <div class="app-layout">
+    <main class="main-content">
+      <div class="page-header">
+        <h1>New Decision Simulation</h1>
+        <p>Describe your decision, compare two options, and receive an AI-powered analysis in seconds.</p>
+      </div>
+
+      <!-- Sample Scenarios -->
+      <div style="margin-bottom:24px;">
+        <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em;">⚡ Quick Load Sample Scenario</div>
+        <div class="samples-row">
+          <div class="sample-pill" data-sample="devpath">Should I become a Full-Stack Dev or AI Engineer?</div>
+          <div class="sample-pill" data-sample="invest">Invest in laptop upgrade vs. start a side business?</div>
+          <div class="sample-pill" data-sample="freelance">Freelancing vs. remote job applications?</div>
+          <div class="sample-pill" data-sample="degree">Get a master's degree vs. self-directed learning?</div>
+        </div>
+      </div>
+
+      <div id="alert-container" style="margin-bottom:16px;"></div>
+
+      <form id="simulation-form" novalidate>
+        <div class="card" style="padding:32px;">
+
+          <!-- Decision Context -->
+          <div class="form-section">
+            <div class="form-section-title">📋 Decision Context</div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label class="form-label" for="decision_title">Decision Title *</label>
+                <input type="text" id="decision_title" class="form-control" placeholder="e.g., Career path choice for 2025" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="category">Category *</label>
+                <select id="category" class="form-control" required>
+                  <option value="">Select a category</option>
+                  <option value="Career">💼 Career</option>
+                  <option value="Education">🎓 Education</option>
+                  <option value="Business">🚀 Business</option>
+                  <option value="Finance">💰 Finance</option>
+                  <option value="Productivity">⚡ Productivity</option>
+                  <option value="Technology">💻 Technology</option>
+                  <option value="Personal Growth">🌱 Personal Growth</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="situation_description">Situation Description *</label>
+              <textarea id="situation_description" class="form-control textarea" placeholder="Describe your current situation, background, and why you're facing this decision. The more context you provide, the more accurate the analysis." rows="4" required></textarea>
+            </div>
+          </div>
+
+          <!-- Options Comparison -->
+          <div class="form-section">
+            <div class="form-section-title">⚖️ Compare Two Options</div>
+            <div class="option-pair">
+              <div class="option-box option-a-box">
+                <div class="option-label option-a-label">🔵 Option A</div>
+                <div class="form-group">
+                  <label class="form-label" for="option_a_title">Option Title *</label>
+                  <input type="text" id="option_a_title" class="form-control" placeholder="e.g., Full-Stack Development" required />
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label" for="option_a_description">Describe This Option *</label>
+                  <textarea id="option_a_description" class="form-control textarea" placeholder="What does this option involve? What are you committing to?" rows="3" required></textarea>
+                </div>
+              </div>
+              <div class="option-box option-b-box">
+                <div class="option-label option-b-label">🟣 Option B</div>
+                <div class="form-group">
+                  <label class="form-label" for="option_b_title">Option Title *</label>
+                  <input type="text" id="option_b_title" class="form-control" placeholder="e.g., AI Engineering" required />
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label class="form-label" for="option_b_description">Describe This Option *</label>
+                  <textarea id="option_b_description" class="form-control textarea" placeholder="What does this option involve? What are you committing to?" rows="3" required></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Your Context -->
+          <div class="form-section" style="margin-bottom:0;">
+            <div class="form-section-title">🎯 Your Context & Goals</div>
+            <div class="form-group">
+              <label class="form-label" for="user_goal">Your Goal</label>
+              <input type="text" id="user_goal" class="form-control" placeholder="e.g., Land a high-paying remote job within 12 months" />
+            </div>
+            <div class="grid-2">
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label" for="time_horizon">Time Horizon</label>
+                <select id="time_horizon" class="form-control">
+                  <option value="Short-term">Short-term (0–6 months)</option>
+                  <option value="Mid-term" selected>Mid-term (6 months–2 years)</option>
+                  <option value="Long-term">Long-term (2+ years)</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label class="form-label" for="risk_tolerance">Risk Tolerance</label>
+                <select id="risk_tolerance" class="form-control">
+                  <option value="Low">🟢 Low — Prefer safety</option>
+                  <option value="Medium" selected>🟡 Medium — Balanced approach</option>
+                  <option value="High">🔴 High — Ready to take risks</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;margin-top:20px;justify-content:flex-end;">
+          <a href="dashboard.html" class="btn btn-ghost">Cancel</a>
+          <button type="submit" class="btn btn-primary btn-lg" id="analyze-btn">
+            🧠 Analyze Decision
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    const SAMPLES = {
+      devpath: { decision_title: 'Full-Stack Dev vs AI Engineering Career Path', category: 'Technology', situation_description: 'I am a junior developer with 1 year of experience in JavaScript. I want to specialize in a high-demand field and build a long-term career in tech. I am deciding between becoming a full-stack web developer or pivoting to AI engineering as the field is growing rapidly.', option_a_title: 'Full-Stack Web Development', option_a_description: 'Master React, Node.js, databases, and DevOps. Large existing job market, strong freelance ecosystem, clear learning path, widely understood by employers.', option_b_title: 'AI Engineering', option_b_description: 'Focus on LLMs, machine learning, Python, and AI infrastructure. Higher barrier to entry, but rapidly growing demand and premium salaries. Future-proof career.', user_goal: 'Secure a well-paying remote tech role within 12 months', time_horizon: 'Mid-term', risk_tolerance: 'Medium' },
+      invest: { decision_title: 'Laptop Upgrade vs Starting a Side Business', category: 'Finance', situation_description: 'I have $2,000 saved and am a freelance graphic designer. My current laptop is aging and slowing me down. Alternatively, I could use this money to begin marketing my services more aggressively and start a formal side business.', option_a_title: 'Upgrade My Laptop', option_a_description: 'Purchase a powerful new MacBook Pro to improve productivity, reduce frustration, handle larger projects faster, and improve client deliverable quality.', option_b_title: 'Invest in a Side Business', option_b_description: 'Spend the $2,000 on a professional website, portfolio, paid advertising, and branding to convert my freelance work into a formal agency.', user_goal: 'Increase monthly income by 50% within 6 months', time_horizon: 'Short-term', risk_tolerance: 'Medium' },
+      freelance: { decision_title: 'Freelancing vs Remote Job Applications', category: 'Career', situation_description: 'I am a skilled developer finishing a bootcamp. I need income soon. I must choose between hunting for remote full-time employment or starting to freelance immediately on Upwork and Fiverr.', option_a_title: 'Focus on Freelancing', option_a_description: 'Build a freelance profile, take small projects, build a portfolio, and grow client base. Start earning quickly but with variable income.', option_b_title: 'Remote Job Applications', option_b_description: 'Apply aggressively to remote junior developer roles. More stable income and benefits but takes longer to land a position.', user_goal: 'Start earning a sustainable income within 3 months', time_horizon: 'Short-term', risk_tolerance: 'Medium' },
+      degree: { decision_title: "Master's Degree vs Self-Directed Learning", category: 'Education', situation_description: "I have a bachelor's degree and 2 years of industry experience. I want to advance my knowledge and career prospects. I am deciding between going back to university for a master's or building a structured self-learning curriculum.", option_a_title: "Pursue a Master's Degree", option_a_description: 'Enroll in a 2-year master\'s program. Credential recognition, structured environment, networking, but significant cost ($40,000+) and time commitment.', option_b_title: 'Self-Directed Learning', option_b_description: 'Build a personal curriculum using online courses, projects, open source contributions, and mentorship. Lower cost, faster, but no formal credential.', user_goal: 'Become a technical leader in my field within 3 years', time_horizon: 'Long-term', risk_tolerance: 'Low' },
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      Auth.redirectIfNotAuth();
+
+      // Check for prefill from dashboard templates
+      const prefill = sessionStorage.getItem('sim_prefill');
+      if (prefill) {
+        try { applyFormData(JSON.parse(prefill)); sessionStorage.removeItem('sim_prefill'); } catch(e) {}
+      }
+
+      // Sample pills
+      document.querySelectorAll('[data-sample]').forEach(pill => {
+        pill.addEventListener('click', () => {
+          const s = SAMPLES[pill.dataset.sample];
+          if (s) applyFormData(s);
+        });
+      });
+
+      function applyFormData(data) {
+        Object.keys(data).forEach(key => {
+          const el = document.getElementById(key);
+          if (el) el.value = data[key];
+        });
+        document.getElementById('decision_title').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      // Form submit
+      const form = document.getElementById('simulation-form');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearAlert('alert-container');
+
+        const fields = ['decision_title', 'category', 'situation_description', 'option_a_title', 'option_a_description', 'option_b_title', 'option_b_description'];
+        for (const f of fields) {
+          const el = document.getElementById(f);
+          if (!el.value.trim()) {
+            showAlert('alert-container', 'Please fill in all required fields (marked with *).');
+            el.focus();
+            return;
+          }
+        }
+
+        const payload = {
+          decision_title:        document.getElementById('decision_title').value.trim(),
+          category:              document.getElementById('category').value,
+          situation_description: document.getElementById('situation_description').value.trim(),
+          option_a_title:        document.getElementById('option_a_title').value.trim(),
+          option_a_description:  document.getElementById('option_a_description').value.trim(),
+          option_b_title:        document.getElementById('option_b_title').value.trim(),
+          option_b_description:  document.getElementById('option_b_description').value.trim(),
+          user_goal:             document.getElementById('user_goal').value.trim(),
+          time_horizon:          document.getElementById('time_horizon').value,
+          risk_tolerance:        document.getElementById('risk_tolerance').value,
+        };
+
+        setLoading('analyze-btn', true, 'Analyzing...');
+        showAILoading();
+
+        // Animate loading bar
+        const bar = document.getElementById('loading-bar');
+        let p = 0;
+        const barInterval = setInterval(() => {
+          p = Math.min(p + Math.random() * 12, 92);
+          bar.style.width = p + '%';
+        }, 2000);
+
+        const res = await API.analyze(payload);
+
+        clearInterval(barInterval);
+        bar.style.width = '100%';
+
+        setTimeout(() => {
+          hideAILoading();
+          setLoading('analyze-btn', false, '🧠 Analyze Decision');
+
+          if (res.ok && res.data.success) {
+            // Store results in sessionStorage for results page
+            sessionStorage.setItem('sim_result', JSON.stringify({ analysis: res.data.analysis, params: payload }));
+            window.location.href = 'results.html';
+          } else {
+            showAlert('alert-container', res.data.error || 'AI analysis failed. Please check your API key or try again.');
+          }
+        }, 600);
+      });
+    });
+  </script>
+</body>
+</html>
